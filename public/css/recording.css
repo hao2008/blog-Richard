@@ -1,0 +1,37 @@
+
+#nav-left {
+    position: fixed;
+    width: 220px;
+    height: 100%;
+    background-color: lightblue;
+}
+#nav-right {
+    float: right; // 靠右
+    margin-top: 0;
+    margin-right: 0;
+    padding-left:10px;
+    padding-right: 10px;
+    background-color: lightgoldenrodyellow;
+}
+
+#content {
+    margin-left: 220px;
+    clear: both;
+    background-color: lightpink;
+}
+
+#title {
+    width:100%;
+    height:50px;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.recording-footer {
+    position: fixed;
+    bottom: 0;
+    width:100%;
+    margin-left: 220px;
+    text-align: center;
+    background-color: #00a0e9;
+}
