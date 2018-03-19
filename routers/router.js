@@ -342,6 +342,7 @@ exports.doRecording = function (req, res, next) {
                 "topic" : fields.topic,
                 "publisher" : fields.publisher,
                 "classify" : fields.classify,
+                "classifyCN" : fields.classifyCN,
                 "content" : fields.content,
                 "date" : date,
                 "thumbsUp" : 0,

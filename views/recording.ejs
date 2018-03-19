@@ -136,10 +136,12 @@
         $("#submit").click(function () {
             var content = UE.getEditor('editor').getContent();
             var classify = $('#classify').find("option:selected").val();
+            var classifyCN = $('#classify').find("option:selected").text();
             $.post("/doRecording", {
                 "topic" : $("#topic").val(),
                 "publisher" : $("#publisher").val(),
                 "classify" : classify,
+                "classifyCN":classifyCN,
                 "content" : content
             }, function (result) {
                 if (result == 1) {
