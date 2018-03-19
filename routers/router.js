@@ -11,83 +11,6 @@ exports.showIndex = function (req, res, next) {
     res.render("index");
 };
 
-// 编写页面
-exports.showRecording = function (req, res, next) {
-    // if (req.session.login != "1") {
-    //     res.send("请登录");
-    // } else {
-    //     res.render("recording");
-    // }
-    res.render("recording");
-
-};
-
-exports.doRecording = function (req, res, next) {
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields) {
-        db.getAllCount("article", function (count) {
-            var allCount = count.toString();
-            var date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-            // 写入数据库
-            db.insertOne("article", {
-                "ID" : parseInt(allCount) + 1,
-                "topic" : fields.topic,
-                "publisher" : fields.publisher,
-                "classify" : fields.classify,
-                "content" : fields.content,
-                "date" : date,
-                "thumbsUp" : 0,
-                "visitNum" : 0
-            }, function (err, result) {
-                if (err) {
-                    res.send("-1");
-                    return;
-                }
-                res.send("1");
-            });
-        });
-    });
-};
-
-// 登录页面
-exports.showLogin = function (req, res, result) {
-    res.render("login");
-};
-
-// 执行登录
-exports.doLogin = function (req, res, result) {
-    // 获取登录信息
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-        var username = fields.username;
-        var password = fields.password;
-        password = md5(md5(password).substr(4, 7) + md5(password));
-
-        // 数据库查找，按照用户名查找密码是否匹配
-        db.find("user", {"username": username}, function (err, result) {
-            if (err) {
-                res.send("-3"); // 服务器错误
-                return;
-            }
-
-            if (result.length == 0) {
-                res.send("-1"); // 没有此人
-            }
-
-            var dbpassword = result[0].password;
-            // 进行相同的加密，然后对比
-            if (password == dbpassword) {
-                req.session.login = "1";
-                res.send("1"); // 登录成功
-                return;
-            } else {
-                res.send("-2"); // 密码不匹配
-            }
-        });
-    });
-    return;
-};
-
 // 访问者地理位置
 exports.getAddress = function (req, res, next) {
     // 得到用户填写的东西
@@ -224,14 +147,12 @@ exports.addThumbsUp = function (req, res, next) {
     });
 };
 
-// JavaScript
-exports.showJavaScript = function (req, res, next) {
-    res.render("JavaScript");
+// 前端
+exports.web = function (req, res, next) {
+    res.render("web");
 };
-
-// 获取JavaScript文章列表
-exports.getJavaScript = function (req, res, next) {
-    db.find("article", {"classify":"JavaScript"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
+exports.webArticle = function (req, res, next) {
+    db.find("article", {"classify":"web"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
         if (err) {
             console.log(err);
             return;
@@ -241,29 +162,12 @@ exports.getJavaScript = function (req, res, next) {
     });
 };
 
-exports.showNodeJS = function (req, res, next) {
-    res.render("NodeJS");
+// 移动端
+exports.mobile = function (req, res, next) {
+    res.render("mobile");
 };
-
-// 获取NodeJS文章列表
-exports.getNodeJS = function (req, res, next) {
-    db.find("article", {"classify":"NodeJS"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        var obj = {"allResult":result};
-        res.json(obj);
-
-    });
-};
-
-exports.showEnvironment = function (req, res, next) {
-    res.render("Environment");
-};
-
-exports.getEnvironment = function (req, res, next) {
-    db.find("article", {"classify":"Environment"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
+exports.mobileArticle = function (req, res, next) {
+    db.find("article", {"classify":"mobile"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
         if (err) {
             console.log(err);
             return;
@@ -273,16 +177,61 @@ exports.getEnvironment = function (req, res, next) {
     });
 };
 
+// 后端
+exports.backend = function (req, res, next) {
+    res.render("backend");
+};
+exports.backendArticle = function (req, res, next) {
+    db.find("article", {"classify":"backend"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        var obj = {"allResult":result};
+        res.json(obj);
+    });
+};
+// 医学杂谈
+exports.medicine = function (req, res, next) {
+    res.render("medicine");
+};
+exports.medicineArticle = function (req, res, next) {
+    db.find("article", {"classify":"medicine"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        var obj = {"allResult":result};
+        res.json(obj);
+    });
+};
+
+// 其他
+exports.other = function (req, res, next) {
+    res.render("other");
+};
+exports.otherArticle = function (req, res, next) {
+    db.find("article", {"classify":"other"}, {"pageamount":10, "sort":{"date":-1}}, function (err, result) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        var obj = {"allResult":result};
+        res.json(obj);
+    });
+};
+
+// 关于
 exports.showAbout = function (req, res, next) {
     res.render("about");
 }
 
 
-// 评论相关
+// 评论
 exports.showComments = function (req, res, next) {
     res.render("comment");
 };
-// 评论
+
 exports.comment = function (req, res, next) {
     var form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
@@ -320,5 +269,103 @@ exports.getComment = function (req, res, next) {
 exports.getAllCountComment = function (req, res, next) {
     db.getAllCount("comment", function (count) {
         res.send(count.toString());
+    });
+};
+
+
+
+// ******************** 后台 ******************
+// 登录
+exports.showLogin = function (req, res, next) {
+    res.render("login");
+};
+exports.login = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var name = fields.username;
+        var password = fields.password;
+        if (!name) {
+            res.send("-4"); // 用户名为空
+            return;
+        }
+        if (!password) {
+            res.send("-5"); // 密码为空
+            return;
+        }
+        password = md5(md5(password).substr(4, 7) + md5(password));
+        db.find("user", {"username" : name}, function (err, result) {
+            if (err) {
+                res.send("-3"); // 服务器错误
+                return;
+            }
+            if (!result.length) {
+                res.send("-1"); // 没有此人
+                return;
+            }
+            var dbpassword = result[0].password;
+            if (password == dbpassword) {
+                req.session.login = "1";
+                res.send("1"); // 登录成功
+            } else {
+                res.send("-2"); // 密码不匹配
+            }
+        });
+    });
+};
+
+exports.manage = function (req, res, next) {
+    if (req.session.login !== '1') {
+        res.redirect("/login");
+        return;
+    }
+    res.render("manage");
+};
+
+// 编写页面
+exports.showRecording = function (req, res, next) {
+    if (req.session.login != "1") {
+        res.redirect("/login");
+        return;
+    }
+    res.render("recording");
+};
+
+exports.doRecording = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields) {
+        db.getAllCount("article", function (count) {
+            var allCount = count.toString();
+            var date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+            // 写入数据库
+            db.insertOne("article", {
+                "ID" : parseInt(allCount) + 1,
+                "topic" : fields.topic,
+                "publisher" : fields.publisher,
+                "classify" : fields.classify,
+                "content" : fields.content,
+                "date" : date,
+                "thumbsUp" : 0,
+                "visitNum" : 0
+            }, function (err, result) {
+                if (err) {
+                    res.send("-1");
+                    return;
+                }
+                res.send("1");
+            });
+        });
+    });
+};
+
+exports.delArticle = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var ID = parseInt(fields.ID);
+        db.deleteMany("article", {"ID":ID}, function (mongoError) {
+            if (mongoError) {
+                return;
+            }
+            res.send("1");
+        });
     });
 };

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>欢迎来到管理后台</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
+    <link href="/bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet"/>
+    <link href="/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet"/>
+    <link href="/sweetalert/sweetalert.css" rel="stylesheet"/>
+    <link href="/css/animate.css" rel="stylesheet"/>
+    <link href="/css/style2.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/bootstrap.js"></script>
+    <script src="/metisMenu/metisMenu.js"></script>
+    <link href="/metisMenu/metisMenu.css"/>
+    <script src="/js/jquery.slimscroll.js"></script>
+    <script src="/inspinia-2.4/inspinia.js"></script>
+    <script src="/js/pace.min.js"></script>
+    <script src="/sweetalert/sweetalert.js"></script>
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span><img src="/images/profile_small.jpg" alt="头像" class="img-circle"/></span>
+                    </div>
+                    <div class="logo-element">
+                        Richard
+                    </div>
+                </li>
+                <li class="active">
+                    <a href="#">
+                        <i class="fa fa-th-large"></i>
+                        <span class="nav-label">
+                            博客管理
+                        </span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse">
+                        <li><a href="/recording">写博客</a> </li>
+                        <li class="active"><a href="/admin">博客文章管理</a> </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="">
+                        <i class="fa fa-diamond"></i>
+                        <span class="nav-label">访问用户数据</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">欢迎来到后台管理系统</span>
+                    </li>
+                    <li>
+                        <a href="/login">
+                            <i class="fa fa-sign-out"></i>
+                            退出登录
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <a href="/recording" class="btn btn-info">写博客</a>
+                        </div>
+                        <div class="ibox-content">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>博客ID</th>
+                                    <th>分类</th>
+                                    <th>博客标题</th>
+                                    <th>发布者</th>
+                                    <th>发布时间</th>
+                                    <th>浏览数</th>
+                                    <th>点赞数</th>
+                                    <th>评论数</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="getAllArticle">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        getPage(0);
+        function getPage(page) {
+            $.post("/getArticle?page="+page, function (result) {
+                var articles = result.allResult;
+                for (var i = 0; i < articles.length; i++) {
+                    var article = articles[i];
+                    var html = "<tr>" + transToHtml(article.ID) + transToHtml(article.classify) + transToHtml(article.topic) + transToHtml(article.publisher) + transToHtml(article.date) + transToHtml(article.visitNum) + transToHtml(article.thumbsUp) + transToHtml('未开放');
+                    html += "<td><a class='btn btn-primary'>修改博客</a> " + "<a data-id='" + article.ID + "' class='btn btn-danger del'>删除博客</a></td></tr>";
+                    $('#getAllArticle').append(html);
+                }
+                deleteArticle();
+            });
+        }
+
+        function transToHtml(string) {
+            return "<td>"+string+"</td>";
+        }
+
+        $.post("/getAllAmount", function (result) {
+            var amount = parseInt(result);
+            pagement = Math.ceil(amount / 10);
+            for (var i = 1; i < pagement + 1; i++) {
+                $(".pagination").append("<li><a href='javascript:;'>" + i + "</a></li>");
+            }
+            $(".pagination li:first").addClass("active");
+            $(".pagination li").click(function () {
+                var page = $(this).index();
+                $('#getAllArticle').html("");
+                getPage(page);
+                $(this).addClass("active").siblings().removeClass("active");
+            });
+        });
+
+        function deleteArticle() {
+            $(".del").click(function () {
+                var ID = $(this).data("id");
+                $.post("/delArticle", {"ID":ID}, function (result) {
+                    if (result === "1") {
+                        swal({
+                            title:"提示",
+                            text:"确定删除这条博客吗？",
+                            type:"warning",
+                            showCancelButton:true,
+                            confirmButtonColor:"#dd6b55",
+                            closeOnConfirm:false
+                        }, function () {
+                            swal({
+                                title:"提示",
+                                text:"删除成功",
+                                timer:2000
+                            }, function () {
+                                window.location.reload();
+                            });
+                        });
+                    } else {
+                        swal({
+                            title:"提示",
+                            text:"删除失败",
+                            timer:1500,
+                            showConfirmButton:false
+                        });
+                    }
+                });
+            });
+        }
+    });
+</script>
+</body>
+</html>

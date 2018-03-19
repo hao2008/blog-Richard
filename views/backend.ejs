@@ -4,13 +4,13 @@
     <title>欢迎来到我的博客，知识无边界，学习无止境。</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
-    <meta name="keywords" content=""/>
+    <meta name="keywords" content="web"/>
     <link href="/bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <script src="/js/jquery-3.3.1.min.js"></script>
     <link href="/css/dashboard.css" rel="stylesheet" type="text/css"/>
     <link href="/css/style.css" rel="stylesheet" type="text/css"/>
     <link href="/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet"/>
     <link href="/css/style2.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/underscore-noflect.js"></script>
 </head>
 <body class="gray-bg">
@@ -34,10 +34,10 @@
                         <li><a href="/">主页</a> </li>
                         <li><a href="/web">前端</a> </li>
                         <li><a href="/mobile">移动端</a> </li>
-                        <li><a href="/backend">后端</a> </li>
+                        <li class="active"><a href="/backend">后端</a> </li>
                         <li><a href="/medicine">医学杂谈</a> </li>
                         <li><a href="/other">其他</a> </li>
-                        <li class="active"><a href="/About">关于</a> </li>
+                        <li><a href="/About">关于</a> </li>
                         <li><a href="/comment">留言</a> </li>
                     </ul>
                 </div>
@@ -60,23 +60,48 @@
 <div class="col-sm-10 col-sm-offset-3 col-md-10 col-md-offset-2">
     <div class="news">
         <div class="news-sec">
-            <div class="news-top">
-                <div class="col-md-12 news-1">
-                    <a href="javascript:;"><h5>关于</h5></a>
-                    <h6>2018-3-16 19:00:00</h6>
-                    <div class="blog-body">
-                        <div class="blog-content">
-                            <h2>博客简介：</h2>
-                            <p>该博客于2018年3月初开发完成，前后端领域知识，为个人成长过程中的学习实践心得。医学杂谈内容，由妻子书写。希望前辈和后辈不吝赐教，相互学习进步。</p>
-                            <h2>个人简介：</h2>
-                            <p>大家可以称呼我"郝哥"、"小郝"或"Richard"，本人于2014年硕士毕业，从事iOS开发将近三年半时间，目前正在实践web及node.js全栈开发。</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="news-top" id="getAllArticle">
+
+            </div>
+            <div class="col-sm-12">
+                <nav>
+                    <ul class="pagination">
+
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
 </div>
 
+<script type="text/template" id="allArticle">
+    <div class="col-md-11 news-1">
+        <a href="/article?ID={{= ID}}"><h5>{{= topic}}</h5></a>
+        <h6>{{= date}}</h6>
+        <div class="post-body">
+            <p> {{= content.substring(0, 200).replace(/<[^>]+>/g, "")}}...</p>
+        </div>
+        <div class="clearfix"></div>
+        <div>
+            <h6>
+                分类：{{= classify }} | 浏览：{{= visitNum}} | 点赞：{{= thumbsUp }} | <a href="/article?ID={{= ID}}">阅读全文</a>
+            </h6>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    var getAllArticle = $("#getAllArticle");
+    var compiled = _.template($("#allArticle").html());
+    getPage(0);
+    function getPage(page) {
+        $.post("/backendArticle?page="+page, function (result) {
+            for (var i=0; i<result.allResult.length; i++) {
+                var htmlStr = compiled(result.allResult[i]);
+                getAllArticle.append(htmlStr);
+            }
+        });
+    }
+</script>
 </body>
 </html>

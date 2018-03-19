@@ -4,13 +4,11 @@
     <title>欢迎来到我的博客</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <!--网站后台样式-->
     <link href="/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet"/>
-    <link href="/inspinia-2.4/inspinia-2.4.css" rel="stylesheet"/>
     <link href="/css/animate.css" rel="stylesheet"/>
     <link href="/css/style.css" rel="stylesheet"/>
-    <link href="/css/recording.css" rel="stylesheet"/>
+    <link href="/css/style2.css" rel="stylesheet"/>
 
     <!--ueditor-->
     <script type="text/javascript" charset="UTF-8" src="/libs/ueditor/ueditor.config.js"></script>
@@ -18,88 +16,109 @@
     <script type="text/javascript" charset="UTF-8" src="/libs/ueditor/lang/zh-cn/zh-cn.js"></script>
 
     <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script src="/inspinia-2.4/inspinia.js"></script>
-    <script src="/js/pace.min.js"></script>
+
 </header>
 <body>
-<div>
-    <nav id="nav-left">
-        <div>
-            <ul>
-                <li>
-                    <div>
-                        <img src="/images/profile_small.jpg" alt="未显示"/>
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span>
+                            <img class="img-circle" src="/images/profile_small.jpg" alt="未显示"/>
+                        </span>
+                    </div>
+                    <div class="logo-element">
+                        Richard
                     </div>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-th-large"></i> <span>博客管理</span></a>
-                    <ul>
-                        <li><a href="/recording">写博客</a></li>
-                        <li><a href="/manage">博客文章管理</a></li>
+                <li class="active">
+                    <a href="#"><i class="fa fa-th-large"></i>
+                        <span class="nav-label">博客管理</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse">
+                        <li class="active"><a href="/recording">写博客</a></li>
+                        <li><a href="/admin">博客文章管理</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="/userdata"><i class="fa fa-diamond"></i> <span>访问用户数据</span></a>
+                    <a href="/userdata"><i class="fa fa-diamond"></i> <span class="nav-label" >访问用户数据</span></a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div id="nav-right">
-        <nav>
-            <div>
-                <a href="#"><i class="fa fa-bars"></i> </a>
-            </div>
-            <ul>
-                <li><span>欢迎来到博客后台</span> </li>
-                <li><a href="login.html"><i class="fa fa-sign-out"></i> </a>退出登录 </li>
-            </ul>
-        </nav>
-    </div>
-
-
-    <div id="content">
-        <h3 id="title">
-            写博客--<small>后台管理系统</small>
-        </h3>
-        <form role="form" class="form-horizontal">
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="topic">文章标题：</label>
-                <div class="col-sm-6">
-                    <input type="text" placeholder="请输入文章标题" class="form-control" id="topic" name="topic"/>
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">欢迎来到后台管理系统</span>
+                    </li>
+                    <li>
+                        <a href="/login">
+                            <i class="fa fa-sign-out"></i>
+                             退出登录
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h3 class="m-t-none m-b">
+                                        -- 写博客 --
+                                    </h3>
+                                    <form role="form" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="topic">文章标题：</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" placeholder="请输入文章标题" class="form-control" id="topic" name="topic"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="publisher">发布者：</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" placeholder="请输入作者" class="form-control" id="publisher" name="publisher"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="classify">博客类型：</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control m-b" id="classify" name="classify">
+                                                    <option value="web">前端</option>
+                                                    <option value="mobile">移动端</option>
+                                                    <option value="backend">后端</option>
+                                                    <option value="medicine">医学杂谈</option>
+                                                    <option value="other">其他</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">博客内容：</label>
+                                            <div class="col-sm-10">
+                                                <script id="editor" type="text/plain" style="width:100%;height:270px;"></script>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                    <input class="col-sm-offset-11 col-sm-1 btn btn-primary" id="submit" type="button" value="发表"/>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="publisher">发布者：</label>
-                <div class="col-sm-6">
-                    <input type="text" value="Richard" class="form-control" id="publisher" name="publisher"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="classify">博客类型：</label>
-                <div class="col-sm-6">
-                    <select class="form-control" id="classify" name="classify">
-                        <option value="KF">JavaScript</option>
-                        <option value="QP">NodeJS</option>
-                        <option value="CY">Environment</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label">博客内容：</label>
-                <div class="col-sm-6">
-                    <script id="editor" type="text/plain" style="width:800px;height:300px;"></script>
-                </div>
-            </div>
-            <div class="form-group">
-                <input class="col-sm-offset-7 col-sm-1 btn btn-primary" id="submit" type="button" value="添加"/>
-            </div>
-
-        </form>
-    </div>
-    <div class="recording-footer">
-        <div>
-            <strong>Copyright</strong> &copy; 2018.Richard All rights reserved.
         </div>
     </div>
 </div>
@@ -116,7 +135,7 @@
     $(document).ready(function () {
         $("#submit").click(function () {
             var content = UE.getEditor('editor').getContent();
-            var classify = $('#classify').find("option:selected").text();
+            var classify = $('#classify').find("option:selected").val();
             $.post("/doRecording", {
                 "topic" : $("#topic").val(),
                 "publisher" : $("#publisher").val(),
@@ -136,6 +155,11 @@
     });
 </script>
 
+<script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="/metisMenu/metisMenu.js"></script>
+<script src="/js/jquery.slimscroll.js"></script>
+<script src="/inspinia-2.4/inspinia.js"></script>
+<script src="/js/pace.min.js"></script>
 </body>
 
 </html>
